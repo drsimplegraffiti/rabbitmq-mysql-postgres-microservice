@@ -16,7 +16,7 @@ pool.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
   }
 
   console.log("Connected to MySQL as id " + pool.threadId);
-  console.log("=====================================================")
+  console.log("====================================================")
 });
 
 module.exports = pool.promise();

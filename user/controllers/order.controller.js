@@ -16,11 +16,9 @@ const createANewOrder = async (req, res) => {
       return res.status(400).json({ message: "Insufficient quantity" });
     }
 
-
     // get the price of the product, multiply it by the quantity and get the total amount
     const total_amount = product[0].price * quantity;
     const convert_price_to_number = Number(product[0].price);
-  
 
     // create a new order object
     const payload = {
@@ -34,12 +32,14 @@ const createANewOrder = async (req, res) => {
 
     // Send order to order queue
     await sendToOrderQueue("order_queue", payload); // we use Buffer.from() to convert the order object to a buffer object so that it can be sent to the queue as a message body
-    
+
     // if the order is successfully sent to the queue, remove the ordered quantity from the available quantity
     const new_available_quantity = product[0].available_quantity - quantity;
-    await productService.updateProductQuantity(product_id, new_available_quantity);
+    await productService.updateProductQuantity(
+      product_id,
+      new_available_quantity
+    );
 
-    
     return res.status(200).json({ message: "Order created successfully" });
   } catch (error) {
     console.log(error);
